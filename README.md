@@ -28,7 +28,9 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
     ```
   * Modify analysis.conf file to specify settings.
   * On target machine run:
+    Open command prompt in Administrator mode
     ```
+    $ cd windows-analyer
     $ python analyzer.py
     ```
   * Logs will be outputted to log.bson

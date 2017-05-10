@@ -633,6 +633,7 @@ class WindowsMonitor(BehaviorHandler):
 
             # Create generic events out of the windows calls.
             elif event["type"] == "apicall":
+                # evan : don't care about these
                 behavior = self.behavior[event["pid"]]
                 reboot = self.reboot[event["pid"]]
 
@@ -764,7 +765,9 @@ class BehaviorReconstructor(object):
             return single("file_written", self.files[h])
 
     def _api_GetFileAttributesW(self, return_value, arguments, flags):
-        return single("file_exists", arguments["filepath"])
+        # evan : modified
+        #return single("file_exists", arguments["filepath"])
+        return single("file_exists", arguments["lpFileName"])
 
     _api_GetFileAttributesExW = _api_GetFileAttributesW
 
