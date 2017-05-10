@@ -2,6 +2,7 @@
 All the functionality of Cuckoo without all of the overhead
 
 Original code for Cuckoo here: https://github.com/cuckoosandbox/cuckoo
+
 Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
 
 ## Requirements
@@ -19,8 +20,11 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
   * Download, compile, and copy cuckoo monitor contents.
     ```
     $ git clone https://github.com/evandowning/monitor.git
+    $ cd monitor
     $ git checkout myworking
     $ make
+    $ cp -r bin ../windows-analyzer
+    $ cd ../windows-analyzer
     ```
   * Modify analysis.conf file to specify settings.
   * On target machine run:
