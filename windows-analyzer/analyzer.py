@@ -85,18 +85,29 @@ class Files(object):
             log.info("Error dumping file from path \"%s\": %s", filepath, e)
             return
 
-        filename = "%s_%s" % (sha256[:16], os.path.basename(filepath))
-        upload_path = os.path.join("files", filename)
+        f = os.path.join(os.getcwd(),'stuff','files')
+        filename = "%s_%s" % (sha256, os.path.basename(filepath))
+        upload_path = os.path.join(f, filename)
 
+        if not os.path.exists(f):
+            os.makedirs(f)
+
+# evan: instead of uploading them, we'll just stash them in a folder and compress it
+#       to be sent to our server later
         try:
-            upload_to_host(
-                # If available use the original filepath, the one that is
-                # not lowercased.
-                self.files_orig.get(filepath.lower(), filepath),
-                upload_path, self.files.get(filepath.lower(), [])
-            )
+#           upload_to_host(
+#               # If available use the original filepath, the one that is
+#               # not lowercased.
+#               self.files_orig.get(filepath.lower(), filepath),
+#               upload_path, self.files.get(filepath.lower(), [])
+#           )
+            with open(filepath,'rb') as fr:
+                with open(upload_path,'wb') as fw:
+                    for line in fr:
+                        fw.write(line)
+
             self.dumped.append(sha256)
-        except (IOError, socket.error) as e:
+        except IOError as e:
             log.error(
                 "Unable to upload dropped file at path \"%s\": %s",
                 filepath, e
@@ -469,13 +480,8 @@ class Analyzer(object):
         else:
             self.config.pipe = "\\??\\PIPE\\%s" % random_string(16, 32)
 
-# evan: commented out because we don't need it
         # Generate a random name for the logging pipe server.
         self.config.logpipe = "\\??\\PIPE\\%s" % random_string(16, 32)
-
-        # evan: Cuckoo's monitor is expecting this file to exist
-        #       so we'll create it
-#       open(self.config.logpipe,'w').close()
 
         # Initialize and start the Command Handler pipe server. This is going
         # to be used for communicating with the monitored processes.
@@ -496,6 +502,7 @@ class Analyzer(object):
         self.log_pipe_server.daemon = True
         self.log_pipe_server.start()
 
+# evan:
 #       # We update the target according to its category. If it's a file, then
 #       # we store the target path.
 #       if self.config.category == "file":
@@ -522,9 +529,8 @@ class Analyzer(object):
         self.command_pipe.stop()
         self.log_pipe_server.stop()
 
-# evan: we don't need to do this anymore
         # Dump all the notified files.
-#       self.files.dump_files()
+        self.files.dump_files()
 
         # Hell yeah.
         log.info("Analysis completed.")
@@ -793,6 +799,11 @@ class Analyzer(object):
 if __name__ == "__main__":
     success = False
     error = ""
+
+    # evan: create folder to put things in (logs, files, etc.)
+    stuff = os.path.join(os.getcwd(),'stuff')
+    if not os.path.exists(stuff):
+        os.makedirs(stuff)
 
     try:
         # Initialize the main analyzer class.

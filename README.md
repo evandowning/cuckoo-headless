@@ -11,7 +11,7 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
     * sudo apt-get install mingw-w64 python-pip nasm
     * sudo pip install sphinx docutils
 
-## Usage
+## Analyzer Usage
   * Download cuckoo-headless folder onto target machine.
     ```
     $ git clone https://github.com/evandowning/cuckoo-headless.git
@@ -33,4 +33,13 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
     $ cd windows-analyer
     $ python analyzer.py
     ```
-  * Logs will be outputted to log.bson
+  * Logs will be outputted to stuff/ folder
+
+## Parsing BSON file
+
+I have also provided code to parse the resulting log.bson file.
+
+```
+$ cd bson-parser
+$ python parser.py log.bson
+```
