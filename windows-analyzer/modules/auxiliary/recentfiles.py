@@ -23,7 +23,7 @@ class RecentFiles(Auxiliary):
     ]
 
     def start(self):
-        # evan: disable for now
+        # TODO evan: disable for now
         return
         if "USERPROFILE" not in os.environ:
             raise CuckooError(

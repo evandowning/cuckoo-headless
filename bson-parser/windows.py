@@ -728,7 +728,9 @@ class BehaviorReconstructor(object):
     _api_NtDeleteFile = _api_DeleteFileA
 
     def _api_FindFirstFileExA(self, return_value, arguments, flags):
-        return single("directory_enumerated", arguments["filepath"])
+        # evan: modified
+        #return single("directory_enumerated", arguments["filepath"])
+        return single("directory_enumerated", arguments["lpFileName"])
 
     _api_FindFirstFileExW = _api_FindFirstFileExA
 
@@ -765,7 +767,7 @@ class BehaviorReconstructor(object):
             return single("file_written", self.files[h])
 
     def _api_GetFileAttributesW(self, return_value, arguments, flags):
-        # evan : modified
+        # evan: modified
         #return single("file_exists", arguments["filepath"])
         return single("file_exists", arguments["lpFileName"])
 
