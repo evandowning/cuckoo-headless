@@ -23,8 +23,6 @@ class RecentFiles(Auxiliary):
     ]
 
     def start(self):
-        # TODO evan: disable for now
-        return
         if "USERPROFILE" not in os.environ:
             raise CuckooError(
                 "Unable to populate recent files as the USERPROFILE "

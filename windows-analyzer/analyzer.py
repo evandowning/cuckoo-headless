@@ -465,7 +465,7 @@ class Analyzer(object):
         # Pass the configuration through to the Process class.
         Process.set_config(self.config)
 
-        #TODO - reset if you want to change the clock
+        #TODO evan - reset if you want to change the clock
         # Set virtual machine clock.
 #       set_clock(datetime.datetime.strptime(
 #           self.config.clock, "%Y%m%dT%H:%M:%S"

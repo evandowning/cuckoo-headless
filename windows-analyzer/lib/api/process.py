@@ -436,6 +436,7 @@ class Process(object):
             "disguise": self.config.options.get("disguise", "0"),
             "pipe-pid": "1",
             "trigger": trigger or "",
+            "diffing-enable": "0",
         }
 
         for key, value in lines.items():
