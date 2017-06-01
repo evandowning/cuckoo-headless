@@ -7,6 +7,7 @@ import logging
 import StringIO
 import threading
 import time
+import os
 
 from lib.api.screenshot import Screenshot
 from lib.common.abstracts import Auxiliary
@@ -73,14 +74,24 @@ class Screenshots(threading.Thread, Auxiliary):
             img_current.save(tmpio, format="JPEG")
             tmpio.seek(0)
 
+            # evan - instead of uploading it, store it in the stuff folder
+            f = os.path.join(os.getcwd(),'stuff','shots')
+            if not os.path.exists(f):
+                os.makedirs(f)
+
+            upload_path = os.path.join(f,'{0}.jpg'.format(img_counter))
+            with open(upload_path,'wb') as fw:
+                for chunk in tmpio:
+                    fw.write(chunk)
+            
             # now upload to host from the StringIO
-            nf = NetlogFile()
-            nf.init("shots/%04d.jpg" % img_counter)
+#           nf = NetlogFile()
+#           nf.init("shots/%04d.jpg" % img_counter)
 
-            for chunk in tmpio:
-                nf.sock.sendall(chunk)
+#           for chunk in tmpio:
+#               nf.sock.sendall(chunk)
 
-            nf.close()
+#           nf.close()
 
             img_last = img_current
 

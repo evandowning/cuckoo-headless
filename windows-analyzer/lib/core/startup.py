@@ -3,6 +3,7 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+import os
 import ctypes
 import logging
 
@@ -14,9 +15,17 @@ log = logging.getLogger()
 def init_logging():
     """Initialize logger."""
     formatter = logging.Formatter("%(asctime)s [%(name)s] %(levelname)s: %(message)s")
-    sh = logging.StreamHandler()
-    sh.setFormatter(formatter)
-    log.addHandler(sh)
+
+    # evan: log to both console and to file
+    logfn = os.path.join(os.getcwd(),'stuff','analysis.log')
+   
+    fileHandler = logging.FileHandler(logfn)
+    fileHandler.setFormatter(formatter)
+    log.addHandler(fileHandler)
+   
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setFormatter(formatter)
+    log.addHandler(consoleHandler)
 
 # evan: not needed anymore
 #   nh = NetlogHandler()
