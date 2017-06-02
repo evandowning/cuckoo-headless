@@ -71,6 +71,9 @@ class Files(object):
         self.add_pid(filepath, pid, verbose=False)
 
     def dump_file(self, filepath):
+        # TODO evan: for now, don't dump files
+        return
+
         """Dump a file to the host."""
         if not os.path.isfile(filepath):
             log.warning("File at path \"%r\" does not exist, skip.", filepath)

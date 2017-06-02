@@ -729,8 +729,8 @@ class BehaviorReconstructor(object):
 
     def _api_FindFirstFileExA(self, return_value, arguments, flags):
         # evan: modified
-        #return single("directory_enumerated", arguments["filepath"])
-        return single("directory_enumerated", arguments["lpFileName"])
+        return single("directory_enumerated", arguments["filepath"])
+        #return single("directory_enumerated", arguments["lpFileName"])
 
     _api_FindFirstFileExW = _api_FindFirstFileExA
 
@@ -768,8 +768,8 @@ class BehaviorReconstructor(object):
 
     def _api_GetFileAttributesW(self, return_value, arguments, flags):
         # evan: modified
-        #return single("file_exists", arguments["filepath"])
-        return single("file_exists", arguments["lpFileName"])
+        return single("file_exists", arguments["filepath"])
+        #return single("file_exists", arguments["lpFileName"])
 
     _api_GetFileAttributesExW = _api_GetFileAttributesW
 
