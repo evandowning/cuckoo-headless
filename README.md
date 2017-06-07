@@ -21,7 +21,7 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
     ```
     $ git clone https://github.com/evandowning/monitor.git
     $ cd monitor
-    $ git checkout myworking
+    $ # git checkout extending-api  => unstable still
     $ make
     $ cp -r bin ../windows-analyzer
     $ cd ../windows-analyzer
