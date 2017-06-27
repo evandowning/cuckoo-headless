@@ -88,7 +88,7 @@ As with all malware analysis environments, Cuckoo has it fair share of weaknesse
 Weaknesses, in the case of malware analysis, are ways malware can evade (bypass)
 analysis efforts.
 
-- Evading monitor (http://cuckoo-monitor.readthedocs.io/en/latest/components.html#components-hook):
+- Evading monitor (http://cuckoo-monitor.readthedocs.io/en/latest/components.html):
     - Skip the first 5 bytes of a hooked function (https://github.com/cuckoosandbox/monitor/issues/12)
 
 - Detecting monitor:
