@@ -73,7 +73,10 @@ class PipeForwarder(threading.Thread):
             )
 
             if success or KERNEL32.GetLastError() == ERROR_MORE_DATA:
-                fn = os.path.join(os.getcwd(),'stuff','log.bson')
+                d = os.path.join(os.getcwd(),'stuff','logs')
+                if not os.path.exists(d):
+                    os.makedirs(d)
+                fn = os.path.join(d,'{0}.bson'.format(str(pid.value)))
                 with open(fn, 'ab') as fa:
                     fa.write(buf.raw[:bytes_read.value])
             elif KERNEL32.GetLastError() == ERROR_BROKEN_PIPE:
