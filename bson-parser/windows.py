@@ -271,6 +271,7 @@ class BsonParser(ProtocolHandler):
 
             tid = dec.get("T", 0)
             time = dec.get("t", 0)
+            print 'Vishal time: {0}'.format(time)
 
             parsed = {
                 "type": mtype,
@@ -290,7 +291,6 @@ class BsonParser(ProtocolHandler):
 
                 apiname, arginfo, argnames, converters, category = self.infomap[index]
                 args = dec.get("args", [])
-
                 if len(args) != len(argnames):
                     log.warning(
                         "Inconsistent arg count (compared to arg names) "
@@ -370,11 +370,11 @@ class BsonParser(ProtocolHandler):
                     parsed["pid"] = self.pid
                     parsed["api"] = apiname
                     parsed["category"] = category
+		    parsed["eip"] = dec.get("PC", -1)
                     parsed["status"] = argdict.pop("is_success", 1)
                     parsed["return_value"] = argdict.pop("retval", 0)
                     parsed["arguments"] = argdict
                     parsed["flags"] = {}
-
                     parsed["stacktrace"] = dec.get("s", [])
                     parsed["uniqhash"] = dec.get("h", 0)
 
@@ -714,9 +714,8 @@ class BehaviorReconstructor(object):
         ))
 
     def _api_CopyFileA(self, return_value, arguments, flags):
-        return single("file_copied", (
-            arguments["oldfilepath"], arguments["newfilepath"]
-        ))
+        #return single("file_copied", (arguments["oldfilepath"], arguments["newfilepath"]))
+	return single("file_copied", (arguments["lpExistingFileName"], arguments["lpNewFileName"]))
 
     _api_CopyFileW = _api_CopyFileA
     _api_CopyFileExW = _api_CopyFileA
@@ -729,8 +728,8 @@ class BehaviorReconstructor(object):
 
     def _api_FindFirstFileExA(self, return_value, arguments, flags):
         # evan: modified
-        return single("directory_enumerated", arguments["filepath"])
-        #return single("directory_enumerated", arguments["lpFileName"])
+        #return single("directory_enumerated", arguments["filepath"])
+        return single("directory_enumerated", arguments["lpFileName"])
 
     _api_FindFirstFileExW = _api_FindFirstFileExA
 
@@ -768,8 +767,8 @@ class BehaviorReconstructor(object):
 
     def _api_GetFileAttributesW(self, return_value, arguments, flags):
         # evan: modified
-        return single("file_exists", arguments["filepath"])
-        #return single("file_exists", arguments["lpFileName"])
+        #return single("file_exists", arguments["filepath"])
+        return single("file_exists", arguments["lpFileName"])
 
     _api_GetFileAttributesExW = _api_GetFileAttributesW
 
