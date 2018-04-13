@@ -271,7 +271,6 @@ class BsonParser(ProtocolHandler):
 
             tid = dec.get("T", 0)
             time = dec.get("t", 0)
-            print 'Vishal time: {0}'.format(time)
 
             parsed = {
                 "type": mtype,
@@ -699,12 +698,16 @@ class BehaviorReconstructor(object):
     # Generic file & directory stuff.
 
     def _api_CreateDirectoryW(self, return_value, arguments, flags):
-        return single("directory_created", arguments["dirpath"])
+        # evan: modified
+        #return single("directory_created", arguments["dirpath"])
+        return single("directory_created", arguments["lpPathName"])
 
     _api_CreateDirectoryExW = _api_CreateDirectoryW
 
     def _api_RemoveDirectoryA(self, return_value, arguments, flags):
-        return single("directory_removed", arguments["dirpath"])
+        # evan: modified
+        #return single("directory_removed", arguments["dirpath"])
+        return single("directory_removed", arguments["lpPathName"])
 
     _api_RemoveDirectoryW = _api_RemoveDirectoryA
 
@@ -714,14 +717,17 @@ class BehaviorReconstructor(object):
         ))
 
     def _api_CopyFileA(self, return_value, arguments, flags):
+        # evan: modified
         #return single("file_copied", (arguments["oldfilepath"], arguments["newfilepath"]))
-	return single("file_copied", (arguments["lpExistingFileName"], arguments["lpNewFileName"]))
+	    return single("file_copied", (arguments["lpExistingFileName"], arguments["lpNewFileName"]))
 
     _api_CopyFileW = _api_CopyFileA
     _api_CopyFileExW = _api_CopyFileA
 
     def _api_DeleteFileA(self, return_value, arguments, flags):
-        return single("file_deleted", arguments["filepath"])
+        # evan: modified
+        #return single("file_deleted", arguments["filepath"])
+        return single("file_deleted", arguments["lpPathName"])
 
     _api_DeleteFileW = _api_DeleteFileA
     _api_NtDeleteFile = _api_DeleteFileA
@@ -782,7 +788,9 @@ class BehaviorReconstructor(object):
     _api_RegCreateKeyExW = _api_RegOpenKeyExA
 
     def _api_RegDeleteKeyA(self, return_value, arguments, flags):
-        return single("regkey_deleted", arguments["regkey"])
+        # evan: modified
+        #return single("regkey_deleted", arguments["regkey"])
+        return single("regkey_deleted", arguments["hKey"])
 
     _api_RegDeleteKeyW = _api_RegDeleteKeyA
     _api_RegDeleteValueA = _api_RegDeleteKeyA
@@ -790,13 +798,17 @@ class BehaviorReconstructor(object):
     _api_NtDeleteValueKey = _api_RegDeleteKeyA
 
     def _api_RegQueryValueExA(self, return_value, arguments, flags):
-        return single("regkey_read", arguments["regkey"])
+        # evan: modified
+        #return single("regkey_read", arguments["regkey"])
+        return single("regkey_read", arguments["hKey"])
 
     _api_RegQueryValueExW = _api_RegQueryValueExA
     _api_NtQueryValueKey = _api_RegQueryValueExA
 
     def _api_RegSetValueExA(self, return_value, arguments, flags):
-        return single("regkey_written", arguments["regkey"])
+        # evan: modified
+        #return single("regkey_written", arguments["regkey"])
+        return single("regkey_written", arguments["hKey"])
 
     _api_RegSetValueExW = _api_RegSetValueExA
     _api_NtSetValueKey = _api_RegSetValueExA
@@ -922,7 +934,9 @@ class RebootReconstructor(object):
         return []
 
     def _api_delete_regkey(self, return_value, arguments, flags):
-        return single("regkey_deleted", arguments["regkey"])
+        # evan: modified
+        #return single("regkey_deleted", arguments["regkey"])
+        return single("regkey_deleted", arguments["hKey"])
 
     _api_RegDeleteKeyA = _api_delete_regkey
     _api_RegDeleteKeyW = _api_delete_regkey
@@ -968,12 +982,19 @@ class RebootReconstructor(object):
     def _api_set_regkey(self, return_value, arguments, flags):
         # Is this a registry key that directly affects reboot persistence?
         for fn, regex in self._reg_regexes:
-            if re.match(regex, arguments["regkey"], re.I):
+            # evan: modified
+            #if re.match(regex, arguments["regkey"], re.I):
+            if re.match(regex, arguments["hKey"], re.I):
                 return fn(self, arguments, flags)
 
-        reg_type = flags.get("reg_type", arguments["reg_type"])
+        # evan: modified
+        print arguments
+        #reg_type = flags.get("reg_type", arguments["reg_type"])
+        reg_type = flags.get("reg_type", arguments["dwType"])
         return single("regkey_written", (
-            arguments["regkey"], reg_type, arguments["value"]
+            # evan: modified
+            #arguments["regkey"], reg_type, arguments["value"]
+            arguments["hKey"], reg_type, arguments["lpValueName"]
         ))
 
     _api_RegSetValueExA = _api_set_regkey
