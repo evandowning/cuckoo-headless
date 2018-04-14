@@ -38,12 +38,18 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
     ```
   * Logs will be outputted to stuff/ folder
 
+  * Extract API call sequences from logs
+    ```
+    $ cd ./extract_raw
+    $ python extract.py
+    ```
+
 ## Parsing BSON file
 
 I have also provided code to parse the resulting log.bson file.
 
 ```
-$ cd bson-parser
+$ cd bson_parser
 $ python parser.py log.bson
 ```
 

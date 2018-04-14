@@ -727,7 +727,10 @@ class BehaviorReconstructor(object):
     def _api_DeleteFileA(self, return_value, arguments, flags):
         # evan: modified
         #return single("file_deleted", arguments["filepath"])
-        return single("file_deleted", arguments["lpPathName"])
+        if 'lpPathName' in arguments:
+            return single("file_deleted", arguments["lpPathName"])
+        elif 'lpFileName' in arguments:
+            return single("file_deleted", arguments["lpFileName"])
 
     _api_DeleteFileW = _api_DeleteFileA
     _api_NtDeleteFile = _api_DeleteFileA
@@ -781,16 +784,18 @@ class BehaviorReconstructor(object):
     # Registry stuff.
 
     def _api_RegOpenKeyExA(self, return_value, arguments, flags):
-        return single("regkey_opened", arguments["regkey"])
+        # evan: TODO - figure out how to resolve "hKey" value: https://www.serverwatch.com/tutorials/article.php/1476831/Managing-Windows-Registry-with-Scripting-Part-1.htm
+        #return single("regkey_opened", arguments["regkey"])
+        return single("regkey_opened", '')
 
     _api_RegOpenKeyExW = _api_RegOpenKeyExA
     _api_RegCreateKeyExA = _api_RegOpenKeyExA
     _api_RegCreateKeyExW = _api_RegOpenKeyExA
 
     def _api_RegDeleteKeyA(self, return_value, arguments, flags):
-        # evan: modified
+        # evan: TODO - figure out how to resolve "hKey" value
         #return single("regkey_deleted", arguments["regkey"])
-        return single("regkey_deleted", arguments["hKey"])
+        return single("regkey_deleted", '')
 
     _api_RegDeleteKeyW = _api_RegDeleteKeyA
     _api_RegDeleteValueA = _api_RegDeleteKeyA
@@ -798,17 +803,17 @@ class BehaviorReconstructor(object):
     _api_NtDeleteValueKey = _api_RegDeleteKeyA
 
     def _api_RegQueryValueExA(self, return_value, arguments, flags):
-        # evan: modified
+        # evan: TODO - figure out how to resolve "hKey" value
         #return single("regkey_read", arguments["regkey"])
-        return single("regkey_read", arguments["hKey"])
+        return single("regkey_read", '')
 
     _api_RegQueryValueExW = _api_RegQueryValueExA
     _api_NtQueryValueKey = _api_RegQueryValueExA
 
     def _api_RegSetValueExA(self, return_value, arguments, flags):
-        # evan: modified
+        # evan: TODO - figure out how to resolve "hKey" value
         #return single("regkey_written", arguments["regkey"])
-        return single("regkey_written", arguments["hKey"])
+        return single("regkey_written", '')
 
     _api_RegSetValueExW = _api_RegSetValueExA
     _api_NtSetValueKey = _api_RegSetValueExA
@@ -934,9 +939,9 @@ class RebootReconstructor(object):
         return []
 
     def _api_delete_regkey(self, return_value, arguments, flags):
-        # evan: modified
+        # evan: TODO - figure out how to resolve "hKey" value
         #return single("regkey_deleted", arguments["regkey"])
-        return single("regkey_deleted", arguments["hKey"])
+        return single("regkey_deleted", '')
 
     _api_RegDeleteKeyA = _api_delete_regkey
     _api_RegDeleteKeyW = _api_delete_regkey
@@ -954,10 +959,14 @@ class RebootReconstructor(object):
     def _handle_run(self, arguments, flags):
         """Handle Run registry keys."""
         reg_type = flags.get("reg_type", arguments["reg_type"])
-        filepath, args = self.parse_cmdline(arguments["value"])
+        # evan: modified
+        #filepath, args = self.parse_cmdline(arguments["value"])
+        filepath, args = self.parse_cmdline(arguments["lpValueName"])
         return multiple(
             ("regkey_written", (
-                arguments["regkey"], reg_type, arguments["value"]
+                # evan: TODO - figure out how to resolve "hKey" value
+                #arguments["regkey"], reg_type, arguments["value"]
+                '', reg_type, arguments["lpValueName"]
             )),
             ("create_process", (
                 filepath, args, "explorer.exe"
@@ -982,19 +991,18 @@ class RebootReconstructor(object):
     def _api_set_regkey(self, return_value, arguments, flags):
         # Is this a registry key that directly affects reboot persistence?
         for fn, regex in self._reg_regexes:
-            # evan: modified
+            # evan: TODO - figure out how to resolve "hKey" value
             #if re.match(regex, arguments["regkey"], re.I):
-            if re.match(regex, arguments["hKey"], re.I):
+            if re.match(regex, '', re.I):
                 return fn(self, arguments, flags)
 
         # evan: modified
-        print arguments
         #reg_type = flags.get("reg_type", arguments["reg_type"])
         reg_type = flags.get("reg_type", arguments["dwType"])
         return single("regkey_written", (
-            # evan: modified
+            # evan: TODO - figure out how to resolve "hKey" value
             #arguments["regkey"], reg_type, arguments["value"]
-            arguments["hKey"], reg_type, arguments["lpValueName"]
+            '', reg_type, arguments["lpValueName"]
         ))
 
     _api_RegSetValueExA = _api_set_regkey
