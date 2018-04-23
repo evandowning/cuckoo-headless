@@ -44,7 +44,7 @@ def getFiles(folder):
             base = os.path.basename(directory)
             if base in ignore_dir:
                 continue
-            
+
             for fn in files:
                 # Ignore files
                 if fn not in ignore_fn:
@@ -74,6 +74,7 @@ def _main():
 #   #TODO - debugging
 #   for h,d,raw,outDir in args:
 #       extract(h,d,raw,outDir)
+#   return
 
     # Extract each raw data file
     pool = Pool(20)

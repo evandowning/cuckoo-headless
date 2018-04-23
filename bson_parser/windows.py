@@ -700,20 +700,28 @@ class BehaviorReconstructor(object):
     def _api_CreateDirectoryW(self, return_value, arguments, flags):
         # evan: modified
         #return single("directory_created", arguments["dirpath"])
-        return single("directory_created", arguments["lpPathName"])
+        if 'lpPathName' in arguments:
+            return single("directory_created", arguments["lpPathName"])
+        elif 'lpFileName' in arguments:
+            return single("directory_created", arguments["lpFileName"])
 
     _api_CreateDirectoryExW = _api_CreateDirectoryW
 
     def _api_RemoveDirectoryA(self, return_value, arguments, flags):
         # evan: modified
         #return single("directory_removed", arguments["dirpath"])
-        return single("directory_removed", arguments["lpPathName"])
+        if 'lpPathName' in arguments:
+            return single("directory_removed", arguments["lpPathName"])
+        elif 'lpFileName' in arguments:
+            return single("directory_removed", arguments["lpFileName"])
 
     _api_RemoveDirectoryW = _api_RemoveDirectoryA
 
     def _api_MoveFileWithProgressW(self, return_value, arguments, flags):
         return single("file_moved", (
-            arguments["oldfilepath"], arguments["newfilepath"]
+            # evan: modified
+            #arguments["oldfilepath"], arguments["newfilepath"]
+	        arguments["lpExistingFileName"], arguments["lpNewFileName"]
         ))
 
     def _api_CopyFileA(self, return_value, arguments, flags):
@@ -841,8 +849,11 @@ class BehaviorReconstructor(object):
     _api_InternetOpenUrlW = _api_InternetOpenUrlA
 
     def _api_DnsQuery_A(self, return_value, arguments, flags):
-        if arguments["hostname"]:
-            return single("resolves_host", arguments["hostname"])
+        # evan: modified
+        #if arguments["hostname"]:
+        #    return single("resolves_host", arguments["hostname"])
+        if ('pNodeName' in arguments) and (arguments['pNodeName']):
+             return single("resolves_host", arguments["pNodeName"])
 
     _api_DnsQuery_W = _api_DnsQuery_A
     _api_DnsQuery_UTF8 = _api_DnsQuery_A
@@ -851,7 +862,9 @@ class BehaviorReconstructor(object):
     _api_gethostbyname = _api_DnsQuery_A
 
     def _api_connect(self, return_value, arguments, flags):
-        return single("connects_ip", arguments["ip_address"])
+        #TODO evan - need to actually resolve this name (i.e., treat it as a string)
+        #return single("connects_ip", arguments["ip_address"])
+        return single("connects_ip", '')
 
     # Mutex stuff
 

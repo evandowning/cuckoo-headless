@@ -35,6 +35,10 @@ def extract(bsonDir,out_fn):
                 with open(tmpfn,'ab') as fa:
                     fa.write(line)
 
+        # If nothing was parsed, continue
+        if not os.path.exists(tmpfn):
+            continue
+
         mon = WindowsMonitor()
         mon.matched = True
 
