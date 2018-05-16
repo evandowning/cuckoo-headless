@@ -41,7 +41,13 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
   * Extract API call sequences from logs
     ```
     $ cd ./extract_raw
-    $ python extract.py
+    $ python extract-sequence.py
+    ```
+
+  * Extract various stats about malware runs from logs
+    ```
+    $ cd ./extract_raw
+    $ python extract-stats.py
     ```
 
 ## Parsing BSON file

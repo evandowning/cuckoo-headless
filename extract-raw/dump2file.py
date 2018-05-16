@@ -20,7 +20,7 @@ def dump(fn):
                     continue
                 else:
                     print '{0}: Error. Dump not in expected format'.format(fn)
-                    sys.exit(1)
+                    return 1
 
             # If second line
             if fn_out is None:

@@ -21,9 +21,19 @@ def extract(h,d,raw,outDir):
     bson2sequence.extract(os.path.join(d,'logs'),os.path.join(outDir,h))
 
     # Clean up files
-    os.remove(os.path.join(d,'analysis.log'))
-    os.remove(os.path.join(d,'stuff.zip'))
-    shutil.rmtree(os.path.join(d,'logs'))
+    for fn in os.listdir(d):
+        # Don't remove raw file
+        if fn == raw:
+            continue
+
+        path = os.path.join(d,fn)
+
+        # If directory
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        # If file
+        else:
+            os.remove(path)
 
 def extract_wrapper(args):
     return extract(*args)
@@ -51,7 +61,7 @@ def getFiles(folder):
                     yield (d,directory,fn)
 
 def usage():
-    print 'usage: python extract.py /data/arsa/nvmtrace-cuckoo-data/output /data/arsa/output-sequences'
+    print 'usage: python extract-sequence.py /data/arsa/nvmtrace-cuckoo-data/output /data/arsa/output-sequences'
     sys.exit(2)
 
 def _main():
