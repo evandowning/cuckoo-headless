@@ -50,6 +50,11 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
     $ python extract-stats.py
     ```
 
+  * To "sort-of" clean up raw folders:
+    ```
+    $ find /data/nvmtrace-cuckoo-data/malicious -type f -not -name "0*" -exec rm {} \;
+    ```
+
 ## Parsing BSON file
 
 I have also provided code to parse the resulting log.bson file.

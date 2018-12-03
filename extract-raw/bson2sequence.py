@@ -49,11 +49,12 @@ def extract(bsonDir,out_fn):
         for e in rv:
             if 'api' in e:
                 api = e['api']
+                pc = e['eip']
                 ts = str(e['time'])
 
                 if ts not in timeline:
                     timeline[ts] = list()
-                timeline[ts].append(api)
+                timeline[ts].append((pc,api))
 
         # Remove temporary BSON file
         os.remove(tmpfn)
@@ -61,8 +62,8 @@ def extract(bsonDir,out_fn):
     # Extract API call sequence (sort by time)
     with open(out_fn,'w') as fw:
         for k,v in sorted(timeline.iteritems(), key=lambda (k,v): int(k)):
-            for call in v:
-                fw.write('{0}\n'.format(call))
+            for pc,call in v:
+                fw.write('{0} {1}\n'.format(pc,call))
 
 def usage():
     print 'usage: python bson2sequence.py logs/ data.out'
