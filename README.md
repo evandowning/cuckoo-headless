@@ -1,15 +1,17 @@
 # cuckoo-headless
 All the functionality of Cuckoo without all of the overhead
 
-Original code for Cuckoo here: https://github.com/cuckoosandbox/cuckoo
+Original code for Cuckoo: https://github.com/cuckoosandbox/cuckoo
 
-Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
+Original code for Cuckoo monitor: https://github.com/cuckoosandbox/monitor
 
 ## Requirements
   * Requirements for Cuckoo monitor and Cuckoo
   * Cuckoo monitor
-    * sudo apt-get install mingw-w64 python-pip nasm
+    * sudo apt install mingw-w64 python-pip nasm
     * sudo pip install sphinx docutils
+  * Python 2.7 for Cuckoo monitor and Cuckoo
+    * sudo apt install python-bson
 
 ## Analyzer Usage
   * Download cuckoo-headless folder onto target machine.
@@ -29,36 +31,27 @@ Original code for Cuckoo monitor here: https://github.com/cuckoosandbox/monitor
     $ cp -r bin ../windows-analyzer
     $ cd ../windows-analyzer
     ```
-  * Modify analysis.conf file to specify settings.
+  * Modify `analysis.conf` file to specify settings.
   * On target machine run:
     Open command prompt in Administrator mode
     ```
     $ cd windows-analyer
     $ python analyzer.py
     ```
-  * Logs will be outputted to stuff/ folder
+  * Logs will be outputted to `stuff/` folder
 
-  * Extract API call sequences from logs
-    ```
-    $ cd ./extract_raw
-    $ python extract-sequence.py
-    ```
+## Extracting information from execution
+```
+# Extract API call sequences from logs
+$ cd ./extract_raw
+$ python extract-sequence.py
 
-  * Extract various stats about malware runs from logs
-    ```
-    $ cd ./extract_raw
-    $ python extract-stats.py
-    ```
+# Extract various stats about malware execution from logs
+$ cd ./extract_raw
+$ python extract-stats.py
+```
 
-  * To "sort-of" clean up raw folders:
-    ```
-    $ find /data/nvmtrace-cuckoo-data/malicious -type f -not -name "0*" -exec rm {} \;
-    ```
-
-## Parsing BSON file
-
-I have also provided code to parse the resulting log.bson file.
-
+## Parsing individual BSON files
 ```
 $ cd bson_parser
 $ python parser.py log.bson
@@ -98,11 +91,11 @@ $ python parser.py log.bson
 - Disguises the virtual machine to make it look like it has 2 processors and 2GB of extra RAM
 - Automatically tracks processes infected by sample
   - TODO
-  
+
 ## Limitations
 
-As with all malware analysis environments, Cuckoo has it fair share of weaknesses.
-Weaknesses, in the case of malware analysis, are ways malware can evade (bypass)
+As with all dynamic malware analysis environments, Cuckoo has its fair share of weaknesses.
+Weaknesses, in the case of malware analysis, are ways malware can evade (or bypass)
 analysis efforts.
 
 - Evading monitor (http://cuckoo-monitor.readthedocs.io/en/latest/components.html):

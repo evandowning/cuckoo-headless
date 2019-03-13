@@ -2,12 +2,16 @@
 
 import sys
 import os
+import shutil
 
 sys.path.append('../')
 from bson_parser.windows import *
 
+import zipfile
+import dump2file
+
 # Extracts API call sequences from Cuckoo BSON data
-def extract(bsonDir,out_fn):
+def extract_sequence(bsonDir):
     timeline = dict()
 
     # Get each bson file
@@ -60,10 +64,43 @@ def extract(bsonDir,out_fn):
         os.remove(tmpfn)
 
     # Extract API call sequence (sort by time)
-    with open(out_fn,'w') as fw:
-        for k,v in sorted(timeline.iteritems(), key=lambda (k,v): int(k)):
-            for pc,call in v:
-                fw.write('{0} {1}\n'.format(pc,call))
+    rv = list()
+    for k,v in sorted(timeline.iteritems(), key=lambda (k,v): int(k)):
+        for pc,call in v:
+            rv.append('{0} {1}'.format(pc,call))
+
+    return rv
+
+# Extracts sequence for sample
+def extract(h,d,raw):
+    # Dump file contents
+    dump2file.dump(os.path.join(d,raw))
+
+    # Uncompress zip file
+    # From: https://stackoverflow.com/questions/3451111/unzipping-files-in-python
+    zippath = os.path.join(d,'stuff.zip')
+    with zipfile.ZipFile(zippath,'r') as zip_ref:
+        zip_ref.extractall(d)
+
+    # Parse bson files and extract data
+    sequence = extract_sequence(os.path.join(d,'logs'))
+
+    # Clean up files
+    for fn in os.listdir(d):
+        # Don't remove raw file
+        if fn == raw:
+            continue
+
+        path = os.path.join(d,fn)
+
+        # If directory
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        # If file
+        else:
+            os.remove(path)
+
+    return h,sequence
 
 def usage():
     print 'usage: python bson2sequence.py logs/ data.out'

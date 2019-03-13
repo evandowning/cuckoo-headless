@@ -1,12 +1,10 @@
 import sys
 import os
 import shutil
-import zipfile
 from multiprocessing import Pool
 import dateutil.parser as dateparser
 import datetime
 
-import dump2file
 import bson2stat
 
 def extract(h,d,raw):
