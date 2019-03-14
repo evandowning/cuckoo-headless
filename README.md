@@ -10,8 +10,6 @@ Original code for Cuckoo monitor: https://github.com/cuckoosandbox/monitor
   * Cuckoo monitor
     * sudo apt install mingw-w64 python-pip nasm
     * sudo pip install sphinx docutils
-  * Python 2.7 for Cuckoo monitor and Cuckoo
-    * sudo apt install python-bson
 
 ## Analyzer Usage
   * Download cuckoo-headless folder onto target machine.
