@@ -16,5 +16,6 @@ apt update
 
 # Requirements for parsing raw files
 apt install -y python2.7
+apt install -y python-pip
 apt install -y python-bson
 pip install -r requirements.txt
