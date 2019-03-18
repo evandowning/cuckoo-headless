@@ -79,7 +79,7 @@ def getFiles(folder):
                     yield (d,directory,fn)
 
 def usage():
-    sys.stdout.write('usage: python extract-stats.py /data/arsa/nvmtrace-cuckoo-data/malware output-samples-ran output-samples-host\n')
+    sys.stderr.write('usage: python extract-stats.py /data/arsa/nvmtrace-cuckoo-data/malware output-samples-ran output-samples-host\n')
     sys.exit(2)
 
 def _main():

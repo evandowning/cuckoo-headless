@@ -34,7 +34,7 @@ def getFiles(folder,hashes):
                     yield (d,directory,fn)
 
 def usage():
-    sys.stdout.write('usage: python extract-sequence.py nvmtrace-cuckoo-data/ sample_hash.txt out_sequences/\n')
+    sys.stderr.write('usage: python extract-sequence.py nvmtrace-cuckoo-data/ sample_hash.txt out_sequences/\n')
     sys.exit(2)
 
 def _main():

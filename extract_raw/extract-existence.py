@@ -35,7 +35,7 @@ def getFiles(folder,sampleMap):
                     yield (d,directory,fn)
 
 def usage():
-    sys.stdout.write('usage: python extract-existence.py nvmtrace-cuckoo-data/ api.txt label.txt sample_hash.txt output.csv\n')
+    sys.stderr.write('usage: python extract-existence.py nvmtrace-cuckoo-data/ api.txt label.txt sample_hash.txt output.csv\n')
     sys.exit(2)
 
 def _main():

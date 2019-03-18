@@ -49,7 +49,7 @@ def dump(fn):
     return 0
 
 def usage():
-    sys.stdout.write('usage: python dump2file.py dump\n')
+    sys.stderr.write('usage: python dump2file.py dump\n')
     sys.exit(2)
 
 def _main():

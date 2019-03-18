@@ -3,7 +3,7 @@ import os
 from windows import *
 
 def usage():
-    sys.stdout.write('usage: python parser.py log.bson\n')
+    sys.stderr.write('usage: python parser.py log.bson\n')
     sys.exit(1)
 
 def _main():
