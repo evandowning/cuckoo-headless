@@ -3,7 +3,7 @@ import os
 from windows import *
 
 def usage():
-    print 'usage: python parser.py log.bson'
+    sys.stdout.write('usage: python parser.py log.bson\n')
     sys.exit(1)
 
 def _main():
@@ -43,16 +43,16 @@ def _main():
 
     # Print each system event
     for e in rv:
-        print e
+        sys.stdout.write('{0}\n'.format(e))
 
     # Return list of processes
     # associated with the events
     procs = mon.run()
 
-    print '\n\nProcesses:'
+    sys.stdout.write('\n\nProcesses:\n')
     for p in procs:
-        print '\t{0}'.format(p['process_name'])
-    print ''
+        sys.stdout.write('\t{0}\n'.format(p['process_name']))
+    sys.stdout.write('\n')
 
     # Remove temporary BSON file
     os.remove(newfn)

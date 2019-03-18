@@ -2,8 +2,6 @@ import sys
 import os
 import re
 
-from Crypto.Hash import MD5
-
 def dump(fn):
     sha = None
     fn_out = None
@@ -19,7 +17,7 @@ def dump(fn):
                     sha = m.group(1)
                     continue
                 else:
-                    print '{0}: Error. Dump not in expected format'.format(fn)
+                    sys.stdout.write('{0}: Error. Dump not in expected format\n'.format(fn))
                     return 1
 
             # If second line
@@ -31,7 +29,7 @@ def dump(fn):
                     fw = open(os.path.join(fn_base, fn_out),'wb')
                     continue
                 else:
-                    print '{0}: Error. Dump not in expected format'.format(fn)
+                    sys.stdout.write('{0}: Error. Dump not in expected format\n'.format(fn))
                     return 1
 
             # If successive lines
@@ -48,22 +46,10 @@ def dump(fn):
         for line in lines:
             fw.write(line)
 
-    # Take sha value
-    h = MD5.new()
-    h.update(open(os.path.join(fn_base,fn_out),'rb').read())
-    dumped = h.hexdigest()
-
-    #TODO - sha hashes never match...
-#   print sha
-#   print dumped
-#   # Check sha value
-#   if sha != dumped:
-#       print '{0}: Error. Dumped file doesn\'t match checksum'.format(fn)
-
     return 0
 
 def usage():
-    print 'python dump2file.py dump'
+    sys.stdout.write('usage: python dump2file.py dump\n')
     sys.exit(2)
 
 def _main():
@@ -73,7 +59,7 @@ def _main():
     fn = sys.argv[1]
 
     if not os.path.exists(fn):
-        print 'Error. {0} does not exist.'.format(fn)
+        sys.stdout.write('Error. {0} does not exist.\n'.format(fn))
         sys.exit(1)
 
     dump(fn)
