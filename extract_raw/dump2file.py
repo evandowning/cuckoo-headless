@@ -19,7 +19,7 @@ def dump(fn,out_base):
                     sha = m.group(1)
                     continue
                 else:
-                    print '{0}: Error. Dump not in expected format'.format(fn)
+                    sys.stdout.write('{0}: Error. Dump not in expected format\n'.format(fn))
                     return 1
 
             # If second line
@@ -30,7 +30,7 @@ def dump(fn,out_base):
                     fw = open(os.path.join(out_base, fn_out),'wb')
                     continue
                 else:
-                    print '{0}: Error. Dump not in expected format'.format(fn)
+                    sys.stdout.write('{0}: Error. Dump not in expected format\n'.format(fn))
                     return 1
 
             # If successive lines
@@ -62,7 +62,7 @@ def dump(fn,out_base):
     return 0
 
 def usage():
-    print 'python dump2file.py dump'
+    sys.stderr.write('usage: python dump2file.py dump\n')
     sys.exit(2)
 
 def _main():
@@ -72,7 +72,7 @@ def _main():
     fn = sys.argv[1]
 
     if not os.path.exists(fn):
-        print 'Error. {0} does not exist.'.format(fn)
+        sys.stdout.write('Error. {0} does not exist.\n'.format(fn))
         sys.exit(1)
 
     dump(fn)

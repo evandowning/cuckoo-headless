@@ -107,7 +107,7 @@ def extract(h,d,raw):
     return h,sequence
 
 def usage():
-    print 'usage: python bson2sequence.py logs/ data.out'
+    sys.stderr.write('usage: python bson2sequence.py logs/ data.out\n')
     sys.exit(2)
 
 def _main():

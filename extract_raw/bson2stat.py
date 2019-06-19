@@ -83,7 +83,7 @@ def extract(bsonDir):
     return {'net': netStats}
 
 def usage():
-    print 'usage: python bson2stat.py logs/'
+    sys.stderr.write('usage: python bson2stat.py logs/\n')
     sys.exit(2)
 
 def _main():

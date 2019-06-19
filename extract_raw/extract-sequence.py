@@ -34,7 +34,7 @@ def getFiles(folder,hashes):
                     yield (d,directory,fn)
 
 def usage():
-    print 'usage: python extract-sequence.py nvmtrace-cuckoo-data/ sample_hash.txt out_sequences/'
+    sys.stderr.write('usage: python extract-sequence.py nvmtrace-cuckoo-data/ sample_hash.txt out_sequences/\n')
     sys.exit(2)
 
 def _main():
@@ -59,7 +59,7 @@ def _main():
     rv = getFiles(rawDir,hashes)
 
     # Construct args
-    args = [(h,d,raw) for h,d,raw in rv][:10]
+    args = [(h,d,raw) for h,d,raw in rv]
 
     # Extract each raw data file
     pool = Pool(20)

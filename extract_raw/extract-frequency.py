@@ -36,7 +36,7 @@ def getFiles(folder,sampleMap):
                     yield (d,directory,fn)
 
 def usage():
-    print 'usage: python extract-frequency.py nvmtrace-cuckoo-data/ api.txt label.txt sample_hash.txt output.csv'
+    sys.stderr.write('usage: python extract-frequency.py nvmtrace-cuckoo-data/ api.txt label.txt sample_hash.txt output.csv\n')
     sys.exit(2)
 
 def _main():

@@ -79,7 +79,7 @@ def getFiles(folder):
                     yield (d,directory,fn)
 
 def usage():
-    print 'usage: python extract-stats.py /data/arsa/nvmtrace-cuckoo-data/malware output-samples-ran output-samples-host'
+    sys.stderr.write('usage: python extract-stats.py /data/arsa/nvmtrace-cuckoo-data/malware output-samples-ran output-samples-host\n')
     sys.exit(2)
 
 def _main():
@@ -132,10 +132,10 @@ def _main():
                 hostHashes.append(h)
 
     # Print final stats
-    print 'Stats:'
-    print 'Total samples: ',len(args)
-    print 'Number of samples which ran for 2 minutes: ', numran
-    print 'Number of samples which ran for 2 minutes and contacted 3 or more 3 hosts: ', numnet
+    sys.stdout.write('Stats:\n')
+    sys.stdout.write('Total samples: {0}\n'.format(len(args)))
+    sys.stdout.write('Number of samples which ran for 2 minutes: {0}\n'.format(numran))
+    sys.stdout.write('Number of samples which ran for 2 minutes and contacted 3 or more 3 hosts: {0}\n'.format(numnet))
 
     # Print hashes of stats
     with open(outRan,'w') as fw:
