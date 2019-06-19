@@ -73,25 +73,26 @@ def extract_sequence(bsonDir):
 
 # Extracts sequence for sample
 def extract(h,d,raw):
+    # Get folder
+    out_base = os.path.join('/tmp','cuckoo-headless-dump',h)
+    if not os.path.exists(out_base):
+        os.makedirs(out_base)
+
     # Dump file contents
-    dump2file.dump(os.path.join(d,raw))
+    dump2file.dump(os.path.join(d,raw),out_base)
 
     # Uncompress zip file
     # From: https://stackoverflow.com/questions/3451111/unzipping-files-in-python
-    zippath = os.path.join(d,'stuff.zip')
+    zippath = os.path.join(out_base,'stuff.zip')
     with zipfile.ZipFile(zippath,'r') as zip_ref:
-        zip_ref.extractall(d)
+        zip_ref.extractall(out_base)
 
     # Parse bson files and extract data
-    sequence = extract_sequence(os.path.join(d,'logs'))
+    sequence = extract_sequence(os.path.join(out_base,'logs'))
 
     # Clean up files
-    for fn in os.listdir(d):
-        # Don't remove raw file
-        if fn == raw:
-            continue
-
-        path = os.path.join(d,fn)
+    for fn in os.listdir(out_base):
+        path = os.path.join(out_base,fn)
 
         # If directory
         if os.path.isdir(path):
@@ -99,6 +100,9 @@ def extract(h,d,raw):
         # If file
         else:
             os.remove(path)
+
+    # Remove base tmp directory
+    shutil.rmtree(out_base)
 
     return h,sequence
 

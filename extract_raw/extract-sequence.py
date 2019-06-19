@@ -59,7 +59,7 @@ def _main():
     rv = getFiles(rawDir,hashes)
 
     # Construct args
-    args = [(h,d,raw) for h,d,raw in rv]
+    args = [(h,d,raw) for h,d,raw in rv][:10]
 
     # Extract each raw data file
     pool = Pool(20)

@@ -4,7 +4,7 @@ import re
 
 from Crypto.Hash import MD5
 
-def dump(fn):
+def dump(fn,out_base):
     sha = None
     fn_out = None
     fw = None
@@ -27,8 +27,7 @@ def dump(fn):
                 m = re.search(r'.*filename\="(.*)".*', line)
                 if m:
                     fn_out = m.group(1)
-                    fn_base = os.path.dirname(fn)
-                    fw = open(os.path.join(fn_base, fn_out),'wb')
+                    fw = open(os.path.join(out_base, fn_out),'wb')
                     continue
                 else:
                     print '{0}: Error. Dump not in expected format'.format(fn)
@@ -41,16 +40,16 @@ def dump(fn):
         fw.close()
 
     # Remove first and last line
-    lines = open(os.path.join(fn_base,fn_out), 'rb').readlines()
+    lines = open(os.path.join(out_base,fn_out), 'rb').readlines()
     lines[0] = ''
     lines[-1] = ''
-    with open(os.path.join(fn_base,fn_out),'wb') as fw:
+    with open(os.path.join(out_base,fn_out),'wb') as fw:
         for line in lines:
             fw.write(line)
 
     # Take sha value
     h = MD5.new()
-    h.update(open(os.path.join(fn_base,fn_out),'rb').read())
+    h.update(open(os.path.join(out_base,fn_out),'rb').read())
     dumped = h.hexdigest()
 
     #TODO - sha hashes never match...
