@@ -18,4 +18,4 @@ apt update
 apt install -y python2.7
 apt install -y python-pip
 apt install -y python-bson
-pip install -r requirements.txt
+python2.7 -m pip install -r requirements.txt
